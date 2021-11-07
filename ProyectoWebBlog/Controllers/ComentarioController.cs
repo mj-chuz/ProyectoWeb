@@ -7,6 +7,7 @@ using ProyectoWebBlog.Models;
 using ProyectoWebBlog.Models.ViewModels;
 using System.IO;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace ProyectoWebBlog.Controllers
 {
@@ -75,19 +76,17 @@ namespace ProyectoWebBlog.Controllers
             }
         }
 
-        public ActionResult VerComentarios(String titulo, DateTime fecha)
+        public JsonResult ObtenerComentariosSegunPublicacion(string identificadorPublicacion)
         {
-            List<ComentarioModel> comentariosPublicacion = this.ObtenerComentariosSegunPublicacion(titulo, fecha);
-            ViewBag.tituloPublicacion = titulo;
-            return View(comentariosPublicacion);
-        }
-
-        public List<ComentarioModel> ObtenerComentariosSegunPublicacion(string Titulo, DateTime Fecha)
-        {
+            string[] partesIdentificador = identificadorPublicacion.Split('|');
+            string titulo = partesIdentificador[0];
+            string fecha = partesIdentificador[1];
+            titulo = Regex.Replace(titulo, "-", " ");
+            DateTime fechaParseada = DateTime.ParseExact(fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             List<ComentarioModel> comentarios;
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
-                comentarios = (from comentario in baseDatos.Comentario.Where(x => x.tituloFK == Titulo && x.fechaFK == Fecha)
+                comentarios = (from comentario in baseDatos.Comentario.Where(x => x.tituloFK == titulo && x.fechaFK == fechaParseada)
                                select new ComentarioModel
                                {
                                    FechaHoraPublicado = comentario.fechaPublicadoPK,
@@ -98,8 +97,9 @@ namespace ProyectoWebBlog.Controllers
 
                                }).ToList();
             }
-            return comentarios;
+            return Json(comentarios);
         }
+       
     }
 
 

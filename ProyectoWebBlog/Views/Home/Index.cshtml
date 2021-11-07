@@ -9,13 +9,30 @@
         <h3>¡Le damos la bienvenida!</h3>
     </div>
 </div>
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <a href="~/Publicacion/CrearPublicacion" class="btn btn-default">Nuevo</a>
-        <div class="col">
+<div class="container-fluid" style="margin-top: 30px">
+    <div id="comentarios-controller" data-request-url="@Url.Action("ObtenerComentariosSegunPublicacion", "Comentario")"></div>
+    <div class="row">
+
+        <div class="col justify-content-start">
 
             @foreach (var elemento in Model)
             {
+                string[] valorTituloSeparado = elemento.Titulo.Split(' ');
+                string valorTitulo = "";
+                foreach (var palabra in valorTituloSeparado)
+                {
+                    if (palabra != "")
+                    {
+                        if (palabra != valorTituloSeparado[0])
+                        {
+                            valorTitulo += "-";
+                        }
+                        valorTitulo += palabra;
+                    }
+                }
+                string valorId = valorTitulo + "-";
+                valorTitulo += "|" + elemento.Fecha.ToString("yyyyMMddHHmmss");
+
                 <div class="card cards-publicaciones">
                     <img class="card-img-top" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @elemento.Titulo, fecha = @elemento.Fecha })">
                     <div class="card-body">
@@ -27,11 +44,27 @@
                     </div>
                     <div class="card-body">
                         <a href="~/Publicacion/VerPublicacionesAutor/?id=@elemento.IdUsuario&nombreCompleto=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" class="card-link">Autor: @ViewBag.ListaUsuarios[@elemento.IdUsuario]</a>
-                        <a href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
+                        <a id=@elemento.Fecha.ToString("yyyyMMddHHmmss") onclick="cargarComentarios(this.id)" value=@valorTitulo data-bs-toggle="modal" data-bs-target="#modal-comentarios-p" href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
                         <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
                     </div>
                 </div>
 
+                <div class="modal fade" id="modal-comentarios-p" tabindex="-1" aria-labelledby="label-modal-comentarios" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="label-modal-comentarios">Comentarios</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" id="modal-comentarios">
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             }
             <div class="container-fluid justify-content-center paginacion-principal">
@@ -46,7 +79,7 @@
             </div>
 
         </div>
-        <div class="col-2 justify-content-end">
+        <div class="col-3 justify-content-end">
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle dropdown-principal" type="button" id="dropdownAutores" data-bs-toggle="dropdown" aria-expanded="false">
                     Autores
@@ -83,4 +116,7 @@
     </div>
 </div>
 
+
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/CargadorComentarios.js"></script>
+

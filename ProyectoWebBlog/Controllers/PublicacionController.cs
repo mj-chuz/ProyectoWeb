@@ -8,6 +8,7 @@ using ProyectoWebBlog.Models.ViewModels;
 using System.IO;
 using System.Data.Entity;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace ProyectoWebBlog.Controllers
 {
@@ -192,7 +193,7 @@ namespace ProyectoWebBlog.Controllers
                     {
 
                         var publicacion = new Publicacion();
-                        publicacion.fechaPK = DateTime.Now;
+                        publicacion.fechaPK = DateTime.ParseExact(DateTime.Now.ToString("yyyyMMddHHmmss"), "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
                         publicacion.tituloPK = publicacionNueva.Titulo;
                         publicacion.texto = publicacionNueva.Texto;
                         publicacion.imagenPublicacion = obtenerBytes(publicacionNueva.ArchivoFoto);

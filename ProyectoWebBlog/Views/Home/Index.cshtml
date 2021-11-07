@@ -27,17 +27,8 @@
                     </div>
                     <div class="card-body">
                         <a href="~/Publicacion/VerPublicacionesAutor/?id=@elemento.IdUsuario&nombreCompleto=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" class="card-link">Autor: @ViewBag.ListaUsuarios[@elemento.IdUsuario]</a>
-                        @{
-                            string fecha = elemento.Fecha.ToString("dd/MM/yyyy");
-                            string[] fechaDividida = fecha.Split('/');
-                            string fechaCompleta = "";
-                            foreach (string n in fechaDividida)
-                            {
-                                fechaCompleta = fechaCompleta + n;
-                            }
-                        }
                         <a href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
-                        <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha">Comentar</a>
+                        <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
                     </div>
                 </div>
 

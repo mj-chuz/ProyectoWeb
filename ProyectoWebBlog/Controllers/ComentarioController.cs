@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using ProyectoWebBlog.Models;
 using ProyectoWebBlog.Models.ViewModels;
 using System.IO;
+using System.Globalization;
 
 namespace ProyectoWebBlog.Controllers
 {
@@ -37,10 +38,10 @@ namespace ProyectoWebBlog.Controllers
             return View(comentarios);
         }
 
-        public ActionResult AgregarComentario(String titulo, DateTime fecha)
+        public ActionResult AgregarComentario(String titulo, String fecha)
         {
             ViewBag.titulo = titulo;
-            ViewBag.fecha = fecha;
+            ViewBag.fecha = DateTime.ParseExact(fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             return View();
         }
 
@@ -56,7 +57,7 @@ namespace ProyectoWebBlog.Controllers
 
                         var comentario = new Comentario();
                         comentario.correoPK = comentarioNuevo.Correo;
-                        comentario.fechaFK = comentarioNuevo.FechaHoraPublicado;
+                        comentario.fechaFK = comentarioNuevo.FechaPublicacion;
                         comentario.texto = comentarioNuevo.Texto;
                         comentario.tituloFK = comentarioNuevo.Titulo;
                         comentario.fechaPublicadoPK = DateTime.Now;

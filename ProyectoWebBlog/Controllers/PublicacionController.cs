@@ -15,9 +15,11 @@ namespace ProyectoWebBlog.Controllers
     public class PublicacionController : Controller
     {
         public UsuarioController AccesoAUsuarios;
+        public CategoriaController AccesoCategorias;
         public int CantidadPaginas { get; set; }
         public PublicacionController()
         {
+            AccesoCategorias = new CategoriaController();
             AccesoAUsuarios = new UsuarioController();
         }
         public ActionResult Index()
@@ -71,6 +73,39 @@ namespace ProyectoWebBlog.Controllers
             return publicaciones;
         }
 
+        public List<PublicacionModel> ObtenerPublicacionesSegunCategoria(string nombreCategoria)
+        {
+            List<PublicacionModel> publicaciones;
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                publicaciones = (from publicacionActual in baseDatos.Publicacion.Where(x => x.nombreCategoriaFK == nombreCategoria)
+                                 select new PublicacionModel
+                                 {
+                                     Fecha = publicacionActual.fechaPK,
+                                     Titulo = publicacionActual.tituloPK,
+                                     Texto = publicacionActual.texto,
+                                     IdUsuario = publicacionActual.idAutorFK,
+                                     NumeroComentarios = (int)publicacionActual.numeroComentarios
+                                 }).ToList();
+            }
+            return publicaciones;
+        }
+
+        public ActionResult VerPublicacionesCategoria(string nombreCategoria, int paginaMostrada = 1)
+        {
+            paginaMostrada = this.ValidarNumeroDePagina(paginaMostrada);
+            Tuple<int, int> limitesPaginacion = this.CalcularLimitesPaginacion(paginaMostrada);
+            List<PublicacionModel> publicacion = this.ObtenerPaginaPublicacionesCategoria(nombreCategoria, paginaMostrada);
+            ViewBag.NumeroInicioPaginacion = limitesPaginacion.Item1;
+            ViewBag.NumeroFinalPaginacion = limitesPaginacion.Item2;
+            ViewBag.PaginaActual = paginaMostrada;
+            ViewBag.CantidadTotalDePaginas = this.CantidadPaginas;
+            ViewBag.Categoria = nombreCategoria;
+            ViewBag.ListaUsuarios = AccesoAUsuarios.ObtenerNombreIdUsuarios();
+            return View(publicacion);
+        }
+
+
         public ActionResult VerPublicacionesAutor(int id, string nombreCompleto, int paginaMostrada = 1)
         {
             paginaMostrada = this.ValidarNumeroDePagina(paginaMostrada);
@@ -101,6 +136,16 @@ namespace ProyectoWebBlog.Controllers
         public List<PublicacionModel> ObtenerPaginaPublicaciones(int id, int pagina = 1)
         {
             List<PublicacionModel> publicaciones = this.ObtenerPublicacionesSegunAutor(id);
+            int indiceInicio = (pagina - 1) * 4;
+            int indiceFinal = indiceInicio + 4;
+            Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
+            return this.ObtenerPublicacionesPaginacion(indicesBusqueda, publicaciones);
+        }
+
+
+        public List<PublicacionModel> ObtenerPaginaPublicacionesCategoria(string nombreCategoria, int pagina = 1)
+        {
+            List<PublicacionModel> publicaciones = this.ObtenerPublicacionesSegunCategoria(nombreCategoria);
             int indiceInicio = (pagina - 1) * 4;
             int indiceFinal = indiceInicio + 4;
             Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
@@ -184,6 +229,9 @@ namespace ProyectoWebBlog.Controllers
         [HttpPost]
         public ActionResult CrearPublicacion(PublicacionModel publicacionNueva)
         {
+            ViewData["Categorias"] = AccesoCategorias.ObtenerNombreCategorias();
+            String categoriaSeleccionada = Request.Form["categoriasSeleccionado"];
+            publicacionNueva.Categoria = categoriaSeleccionada;
             publicacionNueva.TipoArchivo = publicacionNueva.ArchivoFoto.ContentType;
             try
             {
@@ -204,7 +252,7 @@ namespace ProyectoWebBlog.Controllers
                         baseDatos.Publicacion.Add(publicacion);
                         baseDatos.SaveChanges();
                     }
-                    return Redirect("~/Publicacion");
+                    return Redirect("~/Home");
                 }
                 return View(publicacionNueva);
             }

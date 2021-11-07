@@ -47,5 +47,25 @@ namespace ProyectoWebBlog.Controllers
             }
         }
 
+        public List<String> ObtenerNombreCategorias()
+        {
+            List<String> nombreCategorias = new List<string>();
+            List<CategoriaModel> categorias = new List<CategoriaModel>();
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                categorias = (from categoria in baseDatos.Categoria
+                                    select new CategoriaModel
+                                    {
+                                        Nombre = categoria.nombrePK
+                                        
+                                    }).ToList();
+            }
+            foreach (var categoria in categorias)
+            {
+                nombreCategorias.Add(categoria.Nombre);
+            }
+            return nombreCategorias;
+        }
+
     }
 }

@@ -102,11 +102,11 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownCategorias">
                     @{
-                        if (ViewBag.ListaUsuarios != null)
+                        if (ViewBag.ListaCategorias != null)
                         {
-                            foreach (int id in ViewBag.ListaUsuarios.Keys)
+                            foreach (var categoria in ViewBag.ListaCategorias)
                             {
-                                <li><a class="dropdown-item" href="#">@ViewBag.ListaUsuarios[@id]</a></li>
+                        <li><a class="dropdown-item" href="~/Publicacion/VerPublicacionesCategoria/?nombreCategoria=@categoria">@categoria</a></li>
                             }
                         }
                     }

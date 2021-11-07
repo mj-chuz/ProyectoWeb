@@ -1,0 +1,95 @@
+﻿
+@model List<ProyectoWebBlog.Models.ViewModels.PublicacionModel>
+@{
+    ViewBag.Title = "Inicio";
+}
+<div class="card  card-titulo">
+    <div class="card-body">
+        <h1>Diario AM</h1>
+        <h3>¡Le damos la bienvenida!</h3>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <a href="~/Publicacion/CrearPublicacion" class="btn btn-default">Nuevo</a>
+        <div class="col">
+
+            @foreach (var elemento in Model)
+            {
+                <div class="card cards-publicaciones">
+                    <img class="card-img-top" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @elemento.Titulo, fecha = @elemento.Fecha })">
+                    <div class="card-body">
+                        <h5 class="card-title">@elemento.Titulo</h5>
+                        <h8 class="card-title">@elemento.Fecha</h8>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">@elemento.Texto</p>
+                    </div>
+                    <div class="card-body">
+                        <a href="~/Publicacion/VerPublicacionesAutor/?id=@elemento.IdUsuario&nombreCompleto=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" class="card-link">Autor: @ViewBag.ListaUsuarios[@elemento.IdUsuario]</a>
+                        @{
+                            string fecha = elemento.Fecha.ToString("dd/MM/yyyy");
+                            string[] fechaDividida = fecha.Split('/');
+                            string fechaCompleta = "";
+                            foreach (string n in fechaDividida)
+                            {
+                                fechaCompleta = fechaCompleta + n;
+                            }
+                        }
+                        <a href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
+                        <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha">Comentar</a>
+                    </div>
+                </div>
+
+
+            }
+            <div class="container-fluid justify-content-center paginacion-principal">
+                <ul class="pagination paginacion">
+                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual - 1 })">Anterior</a></li>
+                    @for (int pagina = ViewBag.NumeroInicioPaginacion; pagina <= ViewBag.NumeroFinalPaginacion; pagina++)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = pagina })">@pagina</a></li>
+                    }
+                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual + 1 })">Siguiente</a></li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="col-2 justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle dropdown-principal" type="button" id="dropdownAutores" data-bs-toggle="dropdown" aria-expanded="false">
+                    Autores
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownAutores">
+                    @{
+                        if (ViewBag.ListaUsuarios != null)
+                        {
+                            foreach (int id in ViewBag.ListaUsuarios.Keys)
+                            {
+                                <li><a class="dropdown-item" href="~/Publicacion/VerPublicacionesAutor/?id=@id&nombreCompleto=@ViewBag.ListaUsuarios[@id]">@ViewBag.ListaUsuarios[@id]</a></li>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle dropdown-principal" type="button" id="dropdownCategorias" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categorías
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownCategorias">
+                    @{
+                        if (ViewBag.ListaUsuarios != null)
+                        {
+                            foreach (int id in ViewBag.ListaUsuarios.Keys)
+                            {
+                                <li><a class="dropdown-item" href="#">@ViewBag.ListaUsuarios[@id]</a></li>
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>

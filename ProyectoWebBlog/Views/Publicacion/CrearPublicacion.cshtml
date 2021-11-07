@@ -1,0 +1,48 @@
+﻿@model ProyectoWebBlog.Models.ViewModels.PublicacionModel
+@using System.Web;
+@{
+    ViewBag.Title = "Crear Publicacion";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("CrearPublicacion", "Publicacion", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                @Html.LabelFor(publicacion => publicacion.Titulo)
+                @Html.TextBoxFor(publicacion => publicacion.Titulo, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(publicacion => publicacion.Titulo, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.LabelFor(publicacion => publicacion.Texto)
+                @Html.TextAreaFor(publicacion => publicacion.Texto, new { @class = "form-control", @rows = "5" })
+                @Html.ValidationMessageFor(publicacion => publicacion.Texto, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.LabelFor(publicacion => publicacion.Categoria)
+                @Html.TextBoxFor(publicacion => publicacion.Categoria, new { @class = "form-control" })
+                @Html.ValidationMessageFor(publicacion => publicacion.Categoria, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.LabelFor(publicacion => publicacion.IdUsuario)
+                @Html.TextBoxFor(publicacion => publicacion.IdUsuario, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(publicacion => publicacion.IdUsuario, "", new { @class = "text-danger" })
+            </div>
+
+            <div>
+                @Html.LabelFor(publicacion => publicacion.ArchivoFoto)
+                @Html.TextBoxFor(publicacion => publicacion.ArchivoFoto, new { type = "file", @class = "btn btn alert-info" })
+                @Html.ValidationMessageFor(publicacion => publicacion.ArchivoFoto, "", new { @class = "text-danger" })
+            </div>
+            <div style="text-align:right">
+                <input value="Guardar" class="btn btn-primary" type="submit" />
+            </div>
+
+        </div>
+    </div>
+}

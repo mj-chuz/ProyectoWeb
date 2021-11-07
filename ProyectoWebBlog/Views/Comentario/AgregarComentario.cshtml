@@ -1,0 +1,38 @@
+﻿@model ProyectoWebBlog.Models.ViewModels.ComentarioModel
+@{
+    ViewBag.Title = "AgregarComentario";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("AgregarComentario", "Comentario", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                @Html.LabelFor(comentario => comentario.Correo)
+                @Html.TextBoxFor(comentario => comentario.Correo, "", new { @class = "form-control" })
+                @Html.ValidationMessageFor(comentario => comentario.Correo, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(comentario => comentario.Texto)
+                @Html.TextAreaFor(comentario => comentario.Texto, new { @class = "form-control", @rows = "5" })
+                @Html.ValidationMessageFor(comentario => comentario.Texto, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(comentario => comentario.Titulo)
+                @Html.TextBoxFor(comentario => comentario.Titulo, "", new { @class = "form-control", @Value = ViewBag.titulo, style = "display:none;" })
+                @Html.ValidationMessageFor(comentario => comentario.Titulo, "", new { @class = "text-danger" })
+            </div>
+            <div>
+                @Html.LabelFor(comentario => comentario.FechaPublicacion)
+                @Html.TextBoxFor(comentario => comentario.FechaPublicacion, "", new { @class = "form-control", @Value = ViewBag.fecha, style = "display:none;" })
+                @Html.ValidationMessageFor(comentario => comentario.FechaPublicacion, "", new { @class = "text-danger" })
+            </div>
+            <div style="text-align:right">
+                <input value="Guardar" class="btn btn-primary" type="submit" />
+            </div>
+
+        </div>
+    </div>
+}

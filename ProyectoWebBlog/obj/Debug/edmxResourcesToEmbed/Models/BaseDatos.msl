@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="WebBlogModelStoreContainer" CdmEntityContainer="WebBlogEntities">
+    <EntitySetMapping Name="Categoria">
+      <EntityTypeMapping TypeName="WebBlogModel.Categoria">
+        <MappingFragment StoreEntitySet="Categoria">
+          <ScalarProperty Name="nombrePK" ColumnName="nombrePK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comentario">
+      <EntityTypeMapping TypeName="WebBlogModel.Comentario">
+        <MappingFragment StoreEntitySet="Comentario">
+          <ScalarProperty Name="correoPK" ColumnName="correoPK" />
+          <ScalarProperty Name="fechaPublicadoPK" ColumnName="fechaPublicadoPK" />
+          <ScalarProperty Name="texto" ColumnName="texto" />
+          <ScalarProperty Name="fechaFK" ColumnName="fechaFK" />
+          <ScalarProperty Name="tituloFK" ColumnName="tituloFK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Publicacion">
+      <EntityTypeMapping TypeName="WebBlogModel.Publicacion">
+        <MappingFragment StoreEntitySet="Publicacion">
+          <ScalarProperty Name="fechaPK" ColumnName="fechaPK" />
+          <ScalarProperty Name="tituloPK" ColumnName="tituloPK" />
+          <ScalarProperty Name="texto" ColumnName="texto" />
+          <ScalarProperty Name="numeroComentarios" ColumnName="numeroComentarios" />
+          <ScalarProperty Name="idAutorFK" ColumnName="idAutorFK" />
+          <ScalarProperty Name="imagenPublicacion" ColumnName="imagenPublicacion" />
+          <ScalarProperty Name="tipoArchivo" ColumnName="tipoArchivo" />
+          <ScalarProperty Name="nombreCategoriaFK" ColumnName="nombreCategoriaFK" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuario">
+      <EntityTypeMapping TypeName="WebBlogModel.Usuario">
+        <MappingFragment StoreEntitySet="Usuario">
+          <ScalarProperty Name="idPK" ColumnName="idPK" />
+          <ScalarProperty Name="correo" ColumnName="correo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="primerApellido" ColumnName="primerApellido" />
+          <ScalarProperty Name="segundoApellido" ColumnName="segundoApellido" />
+          <ScalarProperty Name="rol" ColumnName="rol" />
+          <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

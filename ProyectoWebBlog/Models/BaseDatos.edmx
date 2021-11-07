@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WebBlogModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="nombrePK" />
+          </Key>
+          <Property Name="nombrePK" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Comentario">
+          <Key>
+            <PropertyRef Name="correoPK" />
+            <PropertyRef Name="fechaPublicadoPK" />
+          </Key>
+          <Property Name="correoPK" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fechaPublicadoPK" Type="datetime" Nullable="false" />
+          <Property Name="texto" Type="varchar(max)" Nullable="false" />
+          <Property Name="fechaFK" Type="datetime" Nullable="false" />
+          <Property Name="tituloFK" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Publicacion">
+          <Key>
+            <PropertyRef Name="fechaPK" />
+            <PropertyRef Name="tituloPK" />
+          </Key>
+          <Property Name="fechaPK" Type="datetime" Nullable="false" />
+          <Property Name="tituloPK" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="texto" Type="varchar(max)" Nullable="false" />
+          <Property Name="numeroComentarios" Type="int" />
+          <Property Name="idAutorFK" Type="int" Nullable="false" />
+          <Property Name="imagenPublicacion" Type="varbinary(max)" />
+          <Property Name="tipoArchivo" Type="varchar" MaxLength="50" />
+          <Property Name="nombreCategoriaFK" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="idPK" />
+          </Key>
+          <Property Name="idPK" Type="int" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="primerApellido" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="segundoApellido" Type="varchar" MaxLength="15" />
+          <Property Name="rol" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="contrasena" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Categoria">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="nombrePK" />
+            </Principal>
+            <Dependent Role="Publicacion">
+              <PropertyRef Name="nombreCategoriaFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publicacion">
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publicacion">
+              <PropertyRef Name="fechaPK" />
+              <PropertyRef Name="tituloPK" />
+            </Principal>
+            <Dependent Role="Comentario">
+              <PropertyRef Name="fechaFK" />
+              <PropertyRef Name="tituloFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idPK" />
+            </Principal>
+            <Dependent Role="Publicacion">
+              <PropertyRef Name="idAutorFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebBlogModelStoreContainer">
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comentario" EntityType="Self.Comentario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publicacion" EntityType="Self.Publicacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Categoria" Association="Self.FK_Categoria">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Publicacion" EntitySet="Publicacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publicacion" Association="Self.FK_Publicacion">
+            <End Role="Publicacion" EntitySet="Publicacion" />
+            <End Role="Comentario" EntitySet="Comentario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario" Association="Self.FK_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Publicacion" EntitySet="Publicacion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebBlogModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Categoria">
+          <Key>
+            <PropertyRef Name="nombrePK" />
+          </Key>
+          <Property Name="nombrePK" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Publicacion" Relationship="Self.FK_Categoria" FromRole="Categoria" ToRole="Publicacion" />
+        </EntityType>
+        <EntityType Name="Comentario">
+          <Key>
+            <PropertyRef Name="correoPK" />
+            <PropertyRef Name="fechaPublicadoPK" />
+          </Key>
+          <Property Name="correoPK" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fechaPublicadoPK" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="texto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="fechaFK" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tituloFK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Publicacion" Relationship="Self.FK_Publicacion" FromRole="Comentario" ToRole="Publicacion" />
+        </EntityType>
+        <EntityType Name="Publicacion">
+          <Key>
+            <PropertyRef Name="fechaPK" />
+            <PropertyRef Name="tituloPK" />
+          </Key>
+          <Property Name="fechaPK" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="tituloPK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="texto" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="numeroComentarios" Type="Int32" />
+          <Property Name="idAutorFK" Type="Int32" Nullable="false" />
+          <Property Name="imagenPublicacion" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="tipoArchivo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="nombreCategoriaFK" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Categoria" Relationship="Self.FK_Categoria" FromRole="Publicacion" ToRole="Categoria" />
+          <NavigationProperty Name="Comentario" Relationship="Self.FK_Publicacion" FromRole="Publicacion" ToRole="Comentario" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario" FromRole="Publicacion" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="idPK" />
+          </Key>
+          <Property Name="idPK" Type="Int32" Nullable="false" />
+          <Property Name="correo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="primerApellido" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="segundoApellido" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="rol" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="contrasena" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Publicacion" Relationship="Self.FK_Usuario" FromRole="Usuario" ToRole="Publicacion" />
+        </EntityType>
+        <Association Name="FK_Categoria">
+          <End Role="Categoria" Type="Self.Categoria" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categoria">
+              <PropertyRef Name="nombrePK" />
+            </Principal>
+            <Dependent Role="Publicacion">
+              <PropertyRef Name="nombreCategoriaFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publicacion">
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Comentario" Type="Self.Comentario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publicacion">
+              <PropertyRef Name="fechaPK" />
+              <PropertyRef Name="tituloPK" />
+            </Principal>
+            <Dependent Role="Comentario">
+              <PropertyRef Name="fechaFK" />
+              <PropertyRef Name="tituloFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Publicacion" Type="Self.Publicacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="idPK" />
+            </Principal>
+            <Dependent Role="Publicacion">
+              <PropertyRef Name="idAutorFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebBlogEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categoria" EntityType="Self.Categoria" />
+          <EntitySet Name="Comentario" EntityType="Self.Comentario" />
+          <EntitySet Name="Publicacion" EntityType="Self.Publicacion" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <AssociationSet Name="FK_Categoria" Association="Self.FK_Categoria">
+            <End Role="Categoria" EntitySet="Categoria" />
+            <End Role="Publicacion" EntitySet="Publicacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publicacion" Association="Self.FK_Publicacion">
+            <End Role="Publicacion" EntitySet="Publicacion" />
+            <End Role="Comentario" EntitySet="Comentario" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuario" Association="Self.FK_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Publicacion" EntitySet="Publicacion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebBlogModelStoreContainer" CdmEntityContainer="WebBlogEntities">
+          <EntitySetMapping Name="Categoria">
+            <EntityTypeMapping TypeName="WebBlogModel.Categoria">
+              <MappingFragment StoreEntitySet="Categoria">
+                <ScalarProperty Name="nombrePK" ColumnName="nombrePK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Comentario">
+            <EntityTypeMapping TypeName="WebBlogModel.Comentario">
+              <MappingFragment StoreEntitySet="Comentario">
+                <ScalarProperty Name="correoPK" ColumnName="correoPK" />
+                <ScalarProperty Name="fechaPublicadoPK" ColumnName="fechaPublicadoPK" />
+                <ScalarProperty Name="texto" ColumnName="texto" />
+                <ScalarProperty Name="fechaFK" ColumnName="fechaFK" />
+                <ScalarProperty Name="tituloFK" ColumnName="tituloFK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publicacion">
+            <EntityTypeMapping TypeName="WebBlogModel.Publicacion">
+              <MappingFragment StoreEntitySet="Publicacion">
+                <ScalarProperty Name="fechaPK" ColumnName="fechaPK" />
+                <ScalarProperty Name="tituloPK" ColumnName="tituloPK" />
+                <ScalarProperty Name="texto" ColumnName="texto" />
+                <ScalarProperty Name="numeroComentarios" ColumnName="numeroComentarios" />
+                <ScalarProperty Name="idAutorFK" ColumnName="idAutorFK" />
+                <ScalarProperty Name="imagenPublicacion" ColumnName="imagenPublicacion" />
+                <ScalarProperty Name="tipoArchivo" ColumnName="tipoArchivo" />
+                <ScalarProperty Name="nombreCategoriaFK" ColumnName="nombreCategoriaFK" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="WebBlogModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="idPK" ColumnName="idPK" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="primerApellido" ColumnName="primerApellido" />
+                <ScalarProperty Name="segundoApellido" ColumnName="segundoApellido" />
+                <ScalarProperty Name="rol" ColumnName="rol" />
+                <ScalarProperty Name="contrasena" ColumnName="contrasena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -11,10 +11,12 @@ namespace ProyectoWebBlog.Controllers
     public class HomeController : Controller
     {
         public UsuarioController AccesoAUsuarios;
+        public CategoriaController AccesoCategorias;
         public int CantidadPaginas { get; set; }
         public HomeController()
         {
             AccesoAUsuarios = new UsuarioController();
+            AccesoCategorias = new CategoriaController();
         }
 
         public ActionResult Index(int paginaMostrada = 1)
@@ -27,6 +29,7 @@ namespace ProyectoWebBlog.Controllers
             ViewBag.PaginaActual = paginaMostrada;
             ViewBag.CantidadTotalDePaginas = this.CantidadPaginas;
             ViewBag.ListaUsuarios = AccesoAUsuarios.ObtenerNombreIdUsuarios();
+            ViewBag.ListaCategorias = AccesoCategorias.ObtenerNombreCategorias();
             return View(publicacion);
         }
 

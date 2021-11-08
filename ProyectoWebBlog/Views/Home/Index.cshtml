@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Inicio";
 }
-<div class="card  card-titulo">
+<div class="card card-titulo">
     <div class="card-body">
         <h1>Diario AM</h1>
         <h3>¡Le damos la bienvenida!</h3>
@@ -14,70 +14,87 @@
     <div class="row">
 
         <div class="col justify-content-start">
-
-            @foreach (var elemento in Model)
+            @if (Model.Count != 0)
             {
-                string[] valorTituloSeparado = elemento.Titulo.Split(' ');
-                string valorTitulo = "";
-                foreach (var palabra in valorTituloSeparado)
+                foreach (var elemento in Model)
                 {
-                    if (palabra != "")
+                    string[] valorTituloSeparado = elemento.Titulo.Split(' ');
+                    string valorTitulo = "";
+                    foreach (var palabra in valorTituloSeparado)
                     {
-                        if (palabra != valorTituloSeparado[0])
+                        if (palabra != "")
                         {
-                            valorTitulo += "-";
+                            if (palabra != valorTituloSeparado[0])
+                            {
+                                valorTitulo += "-";
+                            }
+                            valorTitulo += palabra;
                         }
-                        valorTitulo += palabra;
                     }
-                }
-                string valorId = valorTitulo + "-";
-                valorTitulo += "|" + elemento.Fecha.ToString("yyyyMMddHHmmss");
+                    string valorId = valorTitulo + "-";
+                    valorTitulo += "|" + elemento.Fecha.ToString("yyyyMMddHHmmss");
 
-                <div class="card cards-publicaciones">
-                    <img class="card-img-top" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @elemento.Titulo, fecha = @elemento.Fecha })">
-                    <div class="card-body">
-                        <h5 class="card-title">@elemento.Titulo</h5>
-                        <h8 class="card-title">@elemento.Fecha</h8>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">@elemento.Texto</p>
-                    </div>
-                    <div class="card-body">
-                        <a href="~/Publicacion/VerPublicacionesAutor/?id=@elemento.IdUsuario&nombreCompleto=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" class="card-link">Autor: @ViewBag.ListaUsuarios[@elemento.IdUsuario]</a>
-                        <a id=@elemento.Fecha.ToString("yyyyMMddHHmmss") onclick="cargarComentarios(this.id)" value=@valorTitulo data-bs-toggle="modal" data-bs-target="#modal-comentarios-p" href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
-                        <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="modal-comentarios-p" tabindex="-1" aria-labelledby="label-modal-comentarios" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="label-modal-comentarios">Comentarios</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body" id="modal-comentarios">
+                    <div class="card cards-publicaciones">
+                        <a href="~/Publicacion/VerPublicacion/?Titulo=@elemento.Titulo&Fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")&autor=@ViewBag.ListaUsuarios[@elemento.IdUsuario]"><img class="card-img-top" href="~/Publicacion/VerPublicacion/?Titulo=@elemento.Titulo&Fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")&autor=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @elemento.Titulo, fecha = @elemento.Fecha })"></a>
+                        <div class="card-body">
+                            <h5 class="card-title">@elemento.Titulo</h5>
+                            <h8 class="card-title">@elemento.Fecha</h8>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text texto-publicacion">@elemento.Texto</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <a href="~/Publicacion/VerPublicacionesAutor/?id=@elemento.IdUsuario&nombreCompleto=@ViewBag.ListaUsuarios[@elemento.IdUsuario]" class="card-link">Autor: @ViewBag.ListaUsuarios[@elemento.IdUsuario]</a>
+                                    <a id=@elemento.Fecha.ToString("yyyyMMddHHmmss") onclick="cargarComentarios(this.id)" value=@valorTitulo data-bs-toggle="modal" data-bs-target="#modal-comentarios-p" href="~/Comentario/VerComentarios/?titulo=@elemento.Titulo&fecha=@elemento.Fecha" class="card-link">Comentarios: @elemento.NumeroComentarios</a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@elemento.Titulo&fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
+                                    <a class="btn btn-secondary" style="float: right; margin-right: 10px;" href="~/Publicacion/VerPublicacion/?Titulo=@elemento.Titulo&Fecha=@elemento.Fecha.ToString("yyyyMMddHHmmss")&autor=@ViewBag.ListaUsuarios[@elemento.IdUsuario]">Ver más</a>
+                                </div>
 
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modal-comentarios-p" tabindex="-1" aria-labelledby="label-modal-comentarios" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="label-modal-comentarios">Comentarios</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="modal-comentarios">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                }
+                <div class="justify-content-center paginacion-principal cards-publicaciones">
+                    <ul class="pagination pagination-sm paginacion">
+                        <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual - 1 })">Anterior</a></li>
+                        @for (int pagina = ViewBag.NumeroInicioPaginacion; pagina <= ViewBag.NumeroFinalPaginacion; pagina++)
+                        {
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = pagina })">@pagina</a></li>
+                        }
+                        <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual + 1 })">Siguiente</a></li>
+                    </ul>
                 </div>
-
             }
-            <div class="container-fluid justify-content-center paginacion-principal">
-                <ul class="pagination paginacion">
-                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual - 1 })">Anterior</a></li>
-                    @for (int pagina = ViewBag.NumeroInicioPaginacion; pagina <= ViewBag.NumeroFinalPaginacion; pagina++)
-                    {
-                        <li class="page-item"><a class="page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = pagina })">@pagina</a></li>
-                    }
-                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("Index", "Home", new { paginaMostrada = ViewBag.PaginaActual + 1 })">Siguiente</a></li>
-                </ul>
-            </div>
-
+            else
+            {
+                <div class="container titulos-principales">
+                    <h7>No hay publicaciones que mostrar</h7>
+                </div>
+            }
         </div>
         <div class="col-3 justify-content-end">
             <div class="dropdown">

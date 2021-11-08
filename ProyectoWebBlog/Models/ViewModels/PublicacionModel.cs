@@ -12,11 +12,11 @@ namespace ProyectoWebBlog.Models.ViewModels
         public DateTime Fecha { get; set; }
 
         [Required]
-        [Display(Name = "Titulo de publicacion")]
+        [Display(Name = "Título")]
         public String Titulo { get; set; }
 
         [Required]
-        [Display(Name = "Cuerpo de la publicacion")]
+        [Display(Name = "Cuerpo")]
         public String Texto { get; set; }
 
         public int NumeroComentarios { get; set; }
@@ -24,15 +24,15 @@ namespace ProyectoWebBlog.Models.ViewModels
         public String TipoArchivo { get; set; }
 
         [Required]
-        [Display(Name = "Ingrese una foto")]
+        [Display(Name = "Foto")]
         public HttpPostedFileBase ArchivoFoto { get; set; }
 
         [Required]
-        [Display(Name = "Numero de identificacion")]
+        [Display(Name = "Número de identificación")]
         public int IdUsuario { get; set; }
 
         [Required]
-        [Display(Name = "Categoria de la publicacion")]
+        [Display(Name = "Categoría de la publicación")]
         public String Categoria { get; set; }
     }
 }

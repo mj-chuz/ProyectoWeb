@@ -1,33 +1,34 @@
 ﻿@model ProyectoWebBlog.Models.ViewModels.ComentarioModel
 @{
-    ViewBag.Title = "AgregarComentario";
+    ViewBag.Title = "Agregar Comentario";
 }
 
-<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("AgregarComentario", "Comentario", FormMethod.Post))
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div>
+<div class="container-fluid justify-content-center formulario" >
+    @using (Html.BeginForm("AgregarComentario", "Comentario", FormMethod.Post))
+    {
+    <div class="container">
+        <h2>@ViewBag.titulo</h2>
+        <h5>@ViewBag.Title</h5>
+
+        <div class="col-md-12" style="margin-top: 30px;">
+            <div class="form-group">
                 @Html.LabelFor(comentario => comentario.Correo)
                 @Html.TextBoxFor(comentario => comentario.Correo, "", new { @class = "form-control" })
                 @Html.ValidationMessageFor(comentario => comentario.Correo, "", new { @class = "text-danger" })
             </div>
-            <div>
+            <div class="form-group">
                 @Html.LabelFor(comentario => comentario.Texto)
-                @Html.TextAreaFor(comentario => comentario.Texto, new { @class = "form-control", @rows = "5" })
+                @Html.TextAreaFor(comentario => comentario.Texto, new { @class = "form-control", @rows = "5", oninput = "validarLargoComentario(this,200,document.getElementById('textoProgreso'))" })
                 @Html.ValidationMessageFor(comentario => comentario.Texto, "", new { @class = "text-danger" })
+                <p style="margin-bottom:0; padding-bottom:0;"><strong>*Caracteres máximos: 200</strong></p>
+                <p style="display: inline-block">*Caracteres restantes &nbsp<p style="display: inline-block" id="textoProgreso"></p>
             </div>
             <div>
-                @Html.LabelFor(comentario => comentario.Titulo)
                 @Html.TextBoxFor(comentario => comentario.Titulo, "", new { @class = "form-control", @Value = ViewBag.titulo, style = "display:none;" })
-                @Html.ValidationMessageFor(comentario => comentario.Titulo, "", new { @class = "text-danger" })
             </div>
             <div>
-                @Html.LabelFor(comentario => comentario.FechaPublicacion)
                 @Html.TextBoxFor(comentario => comentario.FechaPublicacion, "", new { @class = "form-control", @Value = ViewBag.fecha, style = "display:none;" })
-                @Html.ValidationMessageFor(comentario => comentario.FechaPublicacion, "", new { @class = "text-danger" })
             </div>
             <div style="text-align:right">
                 <input value="Guardar" class="btn btn-primary" type="submit" />
@@ -35,4 +36,18 @@
 
         </div>
     </div>
-}
+    }
+</div>
+    <script>
+        function validarLargoComentario(textArea, maximoDeCaracteres, textoProgreso) {
+            var tamanoInput = textArea.value.length;
+            var cantidadCaracteresRestante = 0;
+            console.log(tamanoInput);
+            if (tamanoInput >= maximoDeCaracteres) {
+                textArea.value = textArea.value.substring(0, maximoDeCaracteres - 1);
+            } else {
+                cantidadCaracteresRestante = maximoDeCaracteres - tamanoInput;
+            }
+            textoProgreso.innerHTML = cantidadCaracteresRestante;
+        }
+    </script>

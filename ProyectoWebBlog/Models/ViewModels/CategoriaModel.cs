@@ -10,7 +10,7 @@ namespace ProyectoWebBlog.Models.ViewModels
     public class CategoriaModel
     {
         [Required]
-        [Display(Name = "Nombre categoria")]
+        [Display(Name = "Nombre categoría")]
         public String Nombre { get; set; }
     }
 }

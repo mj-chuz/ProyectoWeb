@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Ver publicación";
+}
+
+<div class="container-fluid" style="margin-top: 30px">
+    <div id="comentarios-controller" data-request-url="@Url.Action("ObtenerComentariosSegunPublicacion", "Comentario")"></div>
+
+        @{
+            string[] valorTituloSeparado = ViewBag.publicacion.Titulo.Split(' ');
+            string valorTitulo = "";
+            foreach (var palabra in valorTituloSeparado)
+            {
+                if (palabra != "")
+                {
+                    if (palabra != valorTituloSeparado[0])
+                    {
+                        valorTitulo += "-";
+                    }
+                    valorTitulo += palabra;
+                }
+            }
+            string valorId = valorTitulo + "-";
+            valorTitulo += "|" + ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss");
+        }
+        <div class="card cards-publicaciones">
+            <img class="card-img-top" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @ViewBag.publicacion.Titulo, fecha = @ViewBag.publicacion.Fecha })">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag.publicacion.Titulo</h5>
+                <h8 class="card-title">@ViewBag.publicacion.Fecha</h8>
+            </div>
+            <div class="card-body">
+                <p class="card-text texto-publicacion">@ViewBag.publicacion.Texto</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <a href="~/Publicacion/VerPublicacionesAutor/?id=@ViewBag.publicacion.IdUsuario&nombreCompleto=@ViewBag.autor" class="card-link">Autor: @ViewBag.autor</a>
+                        <a id=@ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss") onclick="cargarComentarios(this.id)" value=@valorTitulo data-bs-toggle="modal" data-bs-target="#modal-comentarios-p" href="~/Comentario/VerComentarios/?titulo=@ViewBag.publicacion.Titulo&fecha=@ViewBag.publicacion.Fecha" class="card-link">Comentarios: @ViewBag.publicacion.NumeroComentarios</a>
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@ViewBag.publicacion.Titulo&fecha=@ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-comentarios-p" tabindex="-1" aria-labelledby="label-modal-comentarios" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="label-modal-comentarios">Comentarios</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-comentarios">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/CargadorComentarios.js"></script>

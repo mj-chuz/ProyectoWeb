@@ -66,7 +66,7 @@ namespace ProyectoWebBlog.Controllers
                         baseDatos.SaveChanges();
                     }
                     AccesoAPublicacion.AumentarComentarios(comentarioNuevo.Titulo, comentarioNuevo.FechaPublicacion);
-                    return Redirect("~/Publicacion");
+                    return Redirect("~/Home");
                 }
                 return View(comentarioNuevo);
             }

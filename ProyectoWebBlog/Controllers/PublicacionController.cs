@@ -60,6 +60,7 @@ namespace ProyectoWebBlog.Controllers
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
                 publicaciones = (from publicacionActual in baseDatos.Publicacion.Where(x => x.idAutorFK == id)
+                                 orderby publicacionActual.fechaPK descending
                                  select new PublicacionModel
                                  {
                                      Fecha = publicacionActual.fechaPK,
@@ -79,6 +80,7 @@ namespace ProyectoWebBlog.Controllers
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
                 publicaciones = (from publicacionActual in baseDatos.Publicacion.Where(x => x.nombreCategoriaFK == nombreCategoria)
+                                 orderby publicacionActual.fechaPK descending
                                  select new PublicacionModel
                                  {
                                      Fecha = publicacionActual.fechaPK,
@@ -136,8 +138,8 @@ namespace ProyectoWebBlog.Controllers
         public List<PublicacionModel> ObtenerPaginaPublicaciones(int id, int pagina = 1)
         {
             List<PublicacionModel> publicaciones = this.ObtenerPublicacionesSegunAutor(id);
-            int indiceInicio = (pagina - 1) * 4;
-            int indiceFinal = indiceInicio + 4;
+            int indiceInicio = (pagina - 1) * 5;
+            int indiceFinal = indiceInicio + 5;
             Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
             return this.ObtenerPublicacionesPaginacion(indicesBusqueda, publicaciones);
         }
@@ -146,8 +148,8 @@ namespace ProyectoWebBlog.Controllers
         public List<PublicacionModel> ObtenerPaginaPublicacionesCategoria(string nombreCategoria, int pagina = 1)
         {
             List<PublicacionModel> publicaciones = this.ObtenerPublicacionesSegunCategoria(nombreCategoria);
-            int indiceInicio = (pagina - 1) * 4;
-            int indiceFinal = indiceInicio + 4;
+            int indiceInicio = (pagina - 1) * 5;
+            int indiceFinal = indiceInicio + 5;
             Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
             return this.ObtenerPublicacionesPaginacion(indicesBusqueda, publicaciones);
         }
@@ -168,6 +170,7 @@ namespace ProyectoWebBlog.Controllers
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
                 publicacion = (from publicacionActual in baseDatos.Publicacion
+                               orderby publicacionActual.fechaPK descending
                                select new PublicacionModel
                                {
                                    Fecha = publicacionActual.fechaPK,
@@ -181,15 +184,35 @@ namespace ProyectoWebBlog.Controllers
             return publicacion;
         }
 
+        public ActionResult VerPublicacion(string Titulo, String Fecha, String autor)
+        {
+
+            DateTime fechaParseada = DateTime.ParseExact(Fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            PublicacionModel publicacion = new PublicacionModel();
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault();
+                publicacion.Fecha = publicacionTabla.fechaPK;
+                publicacion.Texto = publicacionTabla.texto;
+                publicacion.Titulo = publicacionTabla.tituloPK;
+                publicacion.Categoria = publicacionTabla.nombreCategoriaFK;
+                publicacion.IdUsuario = publicacionTabla.idAutorFK;
+                publicacion.NumeroComentarios = (int)publicacionTabla.numeroComentarios;
+            }
+            ViewBag.publicacion = publicacion;
+            ViewBag.autor = autor;
+            return View();
+        }
+
         public int ValidarNumeroDePagina(int numeroDePagina)
         {
             if (numeroDePagina < 1)
             {
                 numeroDePagina = 1;
             }
-            else if (numeroDePagina > 4)
+            else if (numeroDePagina > 5)
             {
-                numeroDePagina = 4;
+                numeroDePagina = 5;
             }
             return numeroDePagina;
         }
@@ -204,7 +227,7 @@ namespace ProyectoWebBlog.Controllers
                 numeroFinalPaginacion = numeroInicioPaginacion + 2;
                 numeroFinalPaginacion = this.ValidarNumeroDePagina(numeroFinalPaginacion);
             }
-            else if (numeroFinalPaginacion == 4)
+            else if (numeroFinalPaginacion == 5)
             {
                 numeroInicioPaginacion = numeroFinalPaginacion - 2;
                 numeroInicioPaginacion = this.ValidarNumeroDePagina(numeroInicioPaginacion);
@@ -215,6 +238,8 @@ namespace ProyectoWebBlog.Controllers
 
         public ActionResult CrearPublicacion()
         {
+            List<SelectListItem> categorias = this.ObtenerCategorias();
+            ViewData["categorias"] = categorias;
             return View();
         }
 
@@ -226,12 +251,24 @@ namespace ProyectoWebBlog.Controllers
             return bytes;
         }
 
+        public List<SelectListItem> ObtenerCategorias()
+        {
+
+            List<String> categorias = AccesoCategorias.ObtenerNombreCategorias();
+            List<SelectListItem> categoriasParseadas = new List<SelectListItem>();
+            foreach (string categoria in categorias)
+            {
+                categoriasParseadas.Add(new SelectListItem { Text = categoria, Value = categoria });
+            }
+            return categoriasParseadas;
+        }
+
         [HttpPost]
         public ActionResult CrearPublicacion(PublicacionModel publicacionNueva)
         {
-            ViewData["Categorias"] = AccesoCategorias.ObtenerNombreCategorias();
-            String categoriaSeleccionada = Request.Form["categoriasSeleccionado"];
-            publicacionNueva.Categoria = categoriaSeleccionada;
+            List<SelectListItem> categorias = this.ObtenerCategorias();
+            ViewData["categorias"] = categorias;
+            publicacionNueva.Categoria = Request.Form["categoria"];
             publicacionNueva.TipoArchivo = publicacionNueva.ArchivoFoto.ContentType;
             try
             {
@@ -287,7 +324,14 @@ namespace ProyectoWebBlog.Controllers
             return File(tupla.Item1, tupla.Item2);
         }
 
-
+        public List<PublicacionModel> ObtenerPaginaPublicaciones(int pagina = 1)
+        {
+            List<PublicacionModel> publicaciones = this.ObtenerPublicaciones();
+            int indiceInicio = (pagina - 1) * 5;
+            int indiceFinal = indiceInicio + 5;
+            Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
+            return this.ObtenerPublicacionesPaginacion(indicesBusqueda, publicaciones);
+        }
 
     }
 }

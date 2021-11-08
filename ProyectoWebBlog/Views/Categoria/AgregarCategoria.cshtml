@@ -1,23 +1,25 @@
 ﻿@model ProyectoWebBlog.Models.ViewModels.CategoriaModel
 @{
-    ViewBag.Title = "AgregarCategoria";
+    ViewBag.Title = "Agregar Categoría";
 }
+<div class="container-fluid justify-content-center formulario">
 
-<h2>@ViewBag.Title</h2>
+    @using (Html.BeginForm("AgregarCategoria", "Categoria", FormMethod.Post))
+    {
 
-@using (Html.BeginForm("AgregarCategoria", "Categoria", FormMethod.Post))
-{
-    <div class="row">
-        <div class="col-md-12">
-            <div>
-                @Html.LabelFor(categoria => categoria.Nombre)
-                @Html.TextBoxFor(categoria => categoria.Nombre, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(categoria => categoria.Nombre, "", new { @class = "text-danger" })
+        <h2>@ViewBag.Title</h2>
+        <div class="container">
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(categoria => categoria.Nombre)
+                    @Html.TextBoxFor(categoria => categoria.Nombre, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(categoria => categoria.Nombre, "", new { @class = "text-danger" })
+                </div>
+                <div style="text-align:right">
+                    <input value="Guardar" class="btn btn-primary" type="submit" />
+                </div>
+
             </div>
-            <div style="text-align:right">
-                <input value="Guardar" class="btn btn-primary" type="submit" />
-            </div>
-
         </div>
-    </div>
-}
+    }
+</div>

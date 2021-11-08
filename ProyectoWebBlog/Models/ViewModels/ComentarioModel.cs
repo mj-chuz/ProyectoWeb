@@ -9,7 +9,7 @@ namespace ProyectoWebBlog.Models.ViewModels
     public class ComentarioModel
     {
         [Required]
-        [Display(Name = "Correo electronico")]
+        [Display(Name = "Correo electrónico")]
         public String Correo { get; set; }
         [Required]
         public String Texto { get; set; }

@@ -85,7 +85,7 @@ namespace ProyectoWebBlog.Controllers
                         baseDatos.SaveChanges();
                     }
 
-                    return Redirect("~/Usuario");
+                    return Redirect("~/Home");
                 }
 
                 return View(usuarioNuevo);
@@ -112,6 +112,23 @@ namespace ProyectoWebBlog.Controllers
 
             }
             return View(usuario);
+        }
+
+        public UsuarioModel ObtenerUsuario(string contrasena, string correo)
+        {
+            UsuarioModel usuario = new UsuarioModel();
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                var usuarioTabla = baseDatos.Usuario.Where(x => x.contrasena == contrasena && x.correo == correo).SingleOrDefault();
+                usuario.Id = usuarioTabla.idPK;
+                usuario.Correo = usuarioTabla.correo;
+                usuario.Nombre = usuarioTabla.nombre;
+                usuario.PrimerApellido = usuarioTabla.primerApellido;
+                usuario.SegundoApellido = usuarioTabla.segundoApellido;
+                usuario.Rol = usuarioTabla.rol;
+
+            }
+            return usuario;
         }
 
         [HttpPost]

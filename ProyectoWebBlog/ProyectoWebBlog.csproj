@@ -131,6 +131,7 @@
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\ComentarioController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InicioSesionController.cs" />
     <Compile Include="Controllers\PublicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
@@ -165,7 +166,9 @@
     </Compile>
     <Compile Include="Models\ViewModels\CategoriaModel.cs" />
     <Compile Include="Models\ViewModels\ComentarioModel.cs" />
+    <Compile Include="Models\ViewModels\InicioSesion.cs" />
     <Compile Include="Models\ViewModels\PublicacionModel.cs" />
+    <Compile Include="Models\ViewModels\Registro.cs" />
     <Compile Include="Models\ViewModels\UsuarioModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -239,19 +242,18 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Usuario\Index.cshtml" />
     <Content Include="Views\Usuario\EditarUsuario.cshtml" />
     <Content Include="Views\Usuario\CrearUsuario.cshtml" />
-    <Content Include="Views\Publicacion\Index.cshtml" />
     <Content Include="Views\Publicacion\VerPublicacionesAutor.cshtml" />
     <Content Include="Views\Publicacion\CrearPublicacion.cshtml" />
     <Content Include="Views\Comentario\AgregarComentario.cshtml" />
-    <Content Include="Views\Comentario\VerComentarios.cshtml" />
     <Content Include="Views\Categoria\AgregarCategoria.cshtml" />
     <Content Include="Views\Publicacion\VerPublicacionesCategoria.cshtml" />
+    <Content Include="Views\Publicacion\VerPublicacion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\InicioSesion\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -9,11 +9,11 @@ namespace ProyectoWebBlog.Models.ViewModels
     public class UsuarioModel
     {
         [Required]
-        [Display(Name = "Numero de identificacion")]
+        [Display(Name = "Número de identificación")]
         public int Id { get; set; }
         [Required]
         [EmailAddress]
-        [Display(Name = "Correo")]
+        [Display(Name = "Correo electrónico")]
         public String Correo { get; set; }
         [Required]
         [Display(Name = "Nombre")]
@@ -24,6 +24,9 @@ namespace ProyectoWebBlog.Models.ViewModels
         [Required]
         [Display(Name = "Segundo Apellido")]
         public String SegundoApellido { get; set; }
+        [Required]
+        [DataType(DataType.Password)]
+        public string Contrasena { get; set; }
         public String Rol { get; set; }
     }
 }

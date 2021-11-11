@@ -21,18 +21,29 @@ namespace ProyectoWebBlog.Controllers
             AccesoUsuarios = new UsuarioController();
             AccesoCategorias = new CategoriaController();
         }
-
+        [AllowAnonymous]
         public ActionResult Index(int paginaMostrada = 1)
         {
-            paginaMostrada = AccesoPublicaciones.ValidarNumeroDePagina(paginaMostrada);
-            Tuple<int, int> limitesPaginacion = AccesoPublicaciones.CalcularLimitesPaginacion(paginaMostrada);
-            List<PublicacionModel> publicacion = AccesoPublicaciones.ObtenerPaginaPublicaciones(paginaMostrada);
-            ViewBag.NumeroInicioPaginacion = limitesPaginacion.Item1;
-            ViewBag.NumeroFinalPaginacion = limitesPaginacion.Item2;
-            ViewBag.PaginaActual = paginaMostrada;
-            ViewBag.CantidadTotalDePaginas = this.CantidadPaginas;
-            ViewBag.ListaUsuarios = AccesoUsuarios.ObtenerNombreIdUsuarios();
-            ViewBag.ListaCategorias = AccesoCategorias.ObtenerNombreCategorias();
+            
+                paginaMostrada = AccesoPublicaciones.ValidarNumeroDePagina(paginaMostrada);
+                Tuple<int, int> limitesPaginacion = AccesoPublicaciones.CalcularLimitesPaginacion(paginaMostrada);
+                List<PublicacionModel> publicacion = AccesoPublicaciones.ObtenerPaginaPublicaciones(paginaMostrada);
+                ViewBag.NumeroInicioPaginacion = limitesPaginacion.Item1;
+                ViewBag.NumeroFinalPaginacion = limitesPaginacion.Item2;
+                ViewBag.PaginaActual = paginaMostrada;
+                ViewBag.CantidadTotalDePaginas = this.CantidadPaginas;
+                ViewBag.ListaUsuarios = AccesoUsuarios.ObtenerNombreIdUsuarios();
+                ViewBag.ListaCategorias = AccesoCategorias.ObtenerNombreCategorias();
+                if (User.IsInRole("Admin"))
+                {
+                    ViewBag.EsAdmin = true;
+                    ViewBag.EsAutor = true;
+                }
+                else if (User.IsInRole("Autor"))
+                {
+                    ViewBag.EsAdmin = false;
+                    ViewBag.EsAutor = true;
+                }
             return View(publicacion);
         }
 

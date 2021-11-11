@@ -2,49 +2,60 @@
 @{
     ViewBag.Title = "Crear Usuario";
 }
+@if (ViewBag.CreacionDeUsuario != null)
+{
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Bienvenido!</strong><h5>
+    @ViewBag.CreacionDeUsuario
+    </h5>
+    </div>
+}
 
 <div class="container-fluid justify-content-center formulario">
 
     @using (Html.BeginForm("CrearUsuario", "Usuario", FormMethod.Post))
     {
-    <div class="container">
-        <h2>@ViewBag.Title</h2>
-        <div class="col-md-12">
-            <div class="form-group">
-                @Html.LabelFor(usuario => usuario.Id)
-                @Html.TextBoxFor(usuario => usuario.Id, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(usuario => usuario.Id, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(usuario => usuario.Correo)
-                @Html.TextBoxFor(usuario => usuario.Correo, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(usuario => usuario.Correo, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(usuario => usuario.Nombre)
-                @Html.TextBoxFor(usuario => usuario.Nombre, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(usuario => usuario.Nombre, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(usuario => usuario.PrimerApellido)
-                @Html.TextBoxFor(usuario => usuario.PrimerApellido, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(usuario => usuario.PrimerApellido, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(usuario => usuario.SegundoApellido)
-                @Html.TextBoxFor(usuario => usuario.SegundoApellido, "", new { @class = "form-control" })
-                @Html.ValidationMessageFor(usuario => usuario.SegundoApellido, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group">
-                @Html.TextBoxFor(usuario => usuario.Rol, "", new { @class = "form-control", placeholder = "Autor", style = "display:none;", @Value = "Autor" })
-            </div>
-            <div class="form-group">
-                @Html.TextBoxFor(usuario => usuario.Contrasena, "", new { @class = "form-control", placeholder = "Autor", style = "display:none;", @Value = "culillo" })
-            </div>
-            <div style="text-align:right">
-                <input value="Guardar" class="btn btn-primary" type="submit" />
+        <div class="container">
+            <h2>@ViewBag.Title</h2>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Id)
+                    @Html.TextBoxFor(usuario => usuario.Id, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Id, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Nombre)
+                    @Html.TextBoxFor(usuario => usuario.Nombre, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Nombre, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.PrimerApellido)
+                    @Html.TextBoxFor(usuario => usuario.PrimerApellido, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.PrimerApellido, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.SegundoApellido)
+                    @Html.TextBoxFor(usuario => usuario.SegundoApellido, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.SegundoApellido, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.TextBoxFor(usuario => usuario.Rol, "", new { @class = "form-control", placeholder = "Autor", style = "display:none;", @Value = "Autor" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Correo)
+                    @Html.TextBoxFor(usuario => usuario.Correo, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Correo, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Contrasena)
+                    @Html.PasswordFor(usuario => usuario.Contrasena, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Contrasena, "", new { @class = "text-danger" })
+                </div>
+                <div style="text-align:right">
+                    <input value="Guardar" class="btn btn-primary" type="submit" />
+                </div>
             </div>
         </div>
-        </div>
-        }
-    </div>
+    }
+</div>

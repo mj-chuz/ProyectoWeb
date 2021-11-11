@@ -6,13 +6,15 @@ using System.Web;
 using System.Web.Mvc;
 using ProyectoWebBlog.Models;
 using ProyectoWebBlog.Models.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 
 namespace ProyectoWebBlog.Controllers
 {
     public class UsuarioController : Controller
     {
-        // GET: Usuario
-        public ActionResult Index()
+        public ActionResult ObtenerListaUsuarios()
         {
             List<UsuarioModel> usuario;
             using (WebBlogEntities baseDatos = new WebBlogEntities())
@@ -64,39 +66,52 @@ namespace ProyectoWebBlog.Controllers
             return View();
         }
 
+
         [HttpPost]
         public ActionResult CrearUsuario(UsuarioModel usuarioNuevo)
         {
-            try
+            Register RegistroUsuario = new Register(usuarioNuevo);
+            var creacionDeUsuario = RegistroUsuario.CreateUser_Click();
+            if ( creacionDeUsuario != null)
             {
-                if (ModelState.IsValid)
+                ViewBag.CreacionDeUsuario = creacionDeUsuario;
+                try
                 {
-                    using (WebBlogEntities baseDatos = new WebBlogEntities())
+                    if (ModelState.IsValid)
                     {
-                        var usuario = new Usuario();
-                        usuario.nombre = usuarioNuevo.Nombre;
-                        usuario.correo = usuarioNuevo.Correo;
-                        usuario.idPK = usuarioNuevo.Id;
-                        usuario.primerApellido = usuarioNuevo.PrimerApellido;
-                        usuario.segundoApellido = usuarioNuevo.SegundoApellido;
-                        usuario.rol = usuarioNuevo.Rol;
-                        usuario.contrasena = "culillo";
-                        baseDatos.Usuario.Add(usuario);
-                        baseDatos.SaveChanges();
+                        using (WebBlogEntities baseDatos = new WebBlogEntities())
+                        {
+                            var usuario = new Usuario();
+                            usuario.nombre = usuarioNuevo.Nombre;
+                            usuario.correo = usuarioNuevo.Correo;
+                            usuario.idPK = usuarioNuevo.Id;
+                            usuario.primerApellido = usuarioNuevo.PrimerApellido;
+                            usuario.segundoApellido = usuarioNuevo.SegundoApellido;
+                            usuario.rol = usuarioNuevo.Rol;
+                            usuario.contrasena = usuarioNuevo.Contrasena;
+                            baseDatos.Usuario.Add(usuario);
+                            baseDatos.SaveChanges();
+                        }
+
+                        return View();
                     }
 
-                    return Redirect("~/Home");
+                    return View(usuarioNuevo);
+
                 }
-
-                return View(usuarioNuevo);
-
+                catch (Exception excepcion)
+                {
+                    throw new Exception(excepcion.Message);
+                }
             }
-            catch (Exception excepcion)
+            else
             {
-                throw new Exception(excepcion.Message);
+                ViewBag.CreacionDeUsuario = "Algo salió mal y no se pudo crear el usuario :(";
+                return View(usuarioNuevo);
             }
-        }
 
+        }
+        [Authorize(Roles = "Admin")]
         public ActionResult EditarUsuario(int Id)
         {
             UsuarioModel usuario = new UsuarioModel();
@@ -130,7 +145,7 @@ namespace ProyectoWebBlog.Controllers
             }
             return usuario;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult EditarUsuario(UsuarioModel usuarioNuevo)
         {
@@ -162,7 +177,7 @@ namespace ProyectoWebBlog.Controllers
                 throw new Exception(excepcion.Message);
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult EliminarUsuario(int Id)
         {
@@ -174,7 +189,27 @@ namespace ProyectoWebBlog.Controllers
                 baseDatos.SaveChanges();
 
             }
-            return Redirect("~/Usuario");
+            return Redirect("~/Usuario/ObtenerListaUsuarios");
+        }
+
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(LoginModel usuario)
+        {
+            Login manejadorSesiones = new Login();
+            bool resultadoLogin = manejadorSesiones.SignIn(usuario);
+            ViewBag.resultadoLogin = resultadoLogin;
+            return View();
+        }
+
+        public void Logout()
+        {
+            var manejadorAutenticacion = HttpContext.Request.GetOwinContext().Authentication;
+            manejadorAutenticacion.SignOut();
+            Response.Redirect("~/Home");
         }
 
     }

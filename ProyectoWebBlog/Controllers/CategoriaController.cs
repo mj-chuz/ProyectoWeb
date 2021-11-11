@@ -10,17 +10,16 @@ namespace ProyectoWebBlog.Controllers
 {
     public class CategoriaController : Controller
     {
-        // GET: Categoria
         public ActionResult Index()
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         public ActionResult AgregarCategoria()
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult AgregarCategoria(CategoriaModel nuevaCategoria)
         {

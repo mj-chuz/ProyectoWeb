@@ -235,11 +235,12 @@ namespace ProyectoWebBlog.Controllers
             numeroFinalPaginacion = this.ValidarNumeroDePagina(numeroFinalPaginacion);
             return new Tuple<int, int>(numeroInicioPaginacion, numeroFinalPaginacion);
         }
-
+        [Authorize(Roles = "Admin, Autor")]
         public ActionResult CrearPublicacion()
         {
             List<SelectListItem> categorias = this.ObtenerCategorias();
             ViewData["categorias"] = categorias;
+            ViewBag.UsuarioId = User.Identity.Name;
             return View();
         }
 
@@ -262,7 +263,7 @@ namespace ProyectoWebBlog.Controllers
             }
             return categoriasParseadas;
         }
-
+        [Authorize(Roles = "Admin, Autor")]
         [HttpPost]
         public ActionResult CrearPublicacion(PublicacionModel publicacionNueva)
         {

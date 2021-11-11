@@ -1,0 +1,47 @@
+﻿@model ProyectoWebBlog.Models.ViewModels.LoginModel
+@{
+    ViewBag.Title = "Login";
+}
+@if (ViewBag.resultadoLogin != null)
+{
+    if (ViewBag.resultadoLogin)
+    {
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Bienvenido!</strong>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong>Algo salió mal y no se pudo iniciar sesión :(</strong><h5>
+                @ViewBag.CreacionDeUsuario
+            </h5>
+        </div>
+    }
+}
+<div class="container-fluid justify-content-center formulario">
+
+    @using (Html.BeginForm("Login", "Usuario", FormMethod.Post))
+    {
+        <div class="container">
+            <h2>Inicio sesión</h2>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Correo)
+                    @Html.TextBoxFor(usuario => usuario.Correo, "", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Correo, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(usuario => usuario.Contrasena)
+                    @Html.PasswordFor(usuario => usuario.Contrasena, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(usuario => usuario.Contrasena, "", new { @class = "text-danger" })
+                </div>
+                <div style="text-align:right">
+                    <input value="Entrar" class="btn btn-primary" type="submit" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

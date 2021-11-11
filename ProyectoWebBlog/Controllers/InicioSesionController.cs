@@ -41,7 +41,7 @@ namespace ProyectoWebBlog.Controllers
         }
 
         [HttpPost]
-        public ActionResult IniciarSesion(SesionModel model)
+        public ActionResult IniciarSesion(LoginModel model)
         {
             if (ModelState.IsValid)
             {
@@ -63,7 +63,7 @@ namespace ProyectoWebBlog.Controllers
             }
         }
 
-        public UsuarioModel ValidarUsuario(SesionModel model)
+        public UsuarioModel ValidarUsuario(LoginModel model)
         {
             var usuario = AccesoUsuarios.ObtenerUsuario(model.Contrasena, model.Correo);
             if (usuario == null)

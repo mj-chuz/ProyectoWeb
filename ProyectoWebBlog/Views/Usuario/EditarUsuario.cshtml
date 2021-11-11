@@ -3,12 +3,16 @@
     ViewBag.Title = "Editar Usuario";
 }
 
-<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("EditarUsuario", "Usuario", FormMethod.Post))
-{
-    <div class="row">
-        <div class="col-md-12">
+
+<div class="container-fluid justify-content-center formulario">
+
+    @using (Html.BeginForm("EditarUsuario", "Usuario", FormMethod.Post))
+    {
+        <h2>@ViewBag.Title</h2>
+        <br />
+        <div class="container">
+
 
             <div>
                 @Html.LabelFor(usuario => usuario.Id)
@@ -41,9 +45,10 @@
                 @Html.ValidationMessageFor(usuario => usuario.Rol, "", new { @class = "text-danger" })
             </div>
             <div style="text-align:right">
-                <input value="Guardar" class="btn btn-default" type="submit" />
+                <input value="Guardar" class="btn btn-primary" type="submit" style="margin-top: 25px"/>
             </div>
 
+
         </div>
-    </div>
-}
+    }
+</div>

@@ -1,0 +1,40 @@
+﻿@model List<ProyectoWebBlog.Models.ViewModels.UsuarioModel>
+@{
+    ViewBag.Title = "Administrar usuarios";
+}
+
+<div class="container justify-content-center" style="margin: 30px auto 40px auto">
+
+    <div class="row">
+        <h2 style="margin: 0 auto 40px auto">@ViewBag.Title</h2>
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>Id </th>
+                    <th>Correo </th>
+                    <th>Nombre </th>
+                    <th>Primer Apellido </th>
+                    <th>Segundo Apellido </th>
+                    <th>Rol </th>
+                    <th></th>
+                </tr>
+                @foreach (var elemento in Model)
+                {
+                    <tr>
+                        <td>@elemento.Id</td>
+                        <td>@elemento.Correo</td>
+                        <td>@elemento.Nombre</td>
+                        <td>@elemento.PrimerApellido</td>
+                        <td>@elemento.SegundoApellido</td>
+                        <td>@elemento.Rol</td>
+                        <td>
+                            <a class="btn btn-primary" href="~/Usuario/EditarUsuario/@elemento.Id">Editar</a>
+                            <a class="btn btn-danger" onclick="location.href='@Url.Action("EliminarUsuario", "Usuario", new { Id = elemento.Id })'">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+    </div>
+    </div>

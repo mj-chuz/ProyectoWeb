@@ -23,17 +23,64 @@
                         <a class="nav-link active" href="/Home/Index">Inicio</a>
 
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Acceso</a>
+                    @if (User.IsInRole("Admin") || User.IsInRole("Autor"))
+                    {
 
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Administración</a>
-                    </li>
+                        <li class="nav-item">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-logout">
+                                Logout
+                            </button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Usuario/Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/Usuario/CrearUsuario">Registrarse</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="navbarDarkDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Administrar
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink3">
+                                <li><a class="dropdown-item" href="/Publicacion/CrearPublicacion">Crear publicación</a></li>
+                                <li><a class="dropdown-item" href="/Categoria/AgregarCategoria">Crear categoría</a></li>
+                                <li><a class="dropdown-item" href="/Usuario/ObtenerListaUsuarios">Administrar usuarios</a></li>
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Autor"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Publicacion/CrearPublicacion">Crear Publicación</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
     </nav>
+    <div class="modal fade" id="modal-logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Seguro que desea cerrar sesión?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" onclick="location.href='@Url.Action("Logout", "Usuario")'" class="btn btn-primary">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @RenderBody()
 

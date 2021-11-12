@@ -112,7 +112,8 @@ namespace ProyectoWebBlog.Controllers
             {
 
                 DateTime fechaParseada = DateTime.ParseExact(fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-                baseDatos.Comentario.Remove(baseDatos.Comentario.Where(x => x.correoPK == correo && DbFunctions.TruncateTime(x.fechaPublicadoPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault());
+                var comentarioTabla = baseDatos.Comentario.Where(x => x.correoPK == correo && DbFunctions.TruncateTime(x.fechaPublicadoPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault();
+                baseDatos.Comentario.Remove(comentarioTabla);
                 baseDatos.SaveChanges();
 
             }

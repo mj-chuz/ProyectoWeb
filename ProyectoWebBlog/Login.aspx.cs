@@ -31,7 +31,7 @@ namespace ProyectoWebBlog
         {
             var usuarioFabrica = new UserStore<IdentityUser>();
             var manejadorUsuario = new UserManager<IdentityUser>(usuarioFabrica);
-            var user = manejadorUsuario.Find(usuario.Correo, usuario.Contrasena);
+            var user = manejadorUsuario.Find(usuario.Cedula, usuario.Contrasena);
 
             if (user != null)
             {

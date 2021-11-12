@@ -28,7 +28,6 @@
                         <td>@elemento.SegundoApellido</td>
                         <td>@elemento.Rol</td>
                         <td>
-                            <a class="btn btn-primary" href="~/Usuario/EditarUsuario/@elemento.Id">Editar</a>
                             <a class="btn btn-danger" onclick="location.href='@Url.Action("EliminarUsuario", "Usuario", new { Id = elemento.Id })'">Eliminar</a>
                         </td>
                     </tr>

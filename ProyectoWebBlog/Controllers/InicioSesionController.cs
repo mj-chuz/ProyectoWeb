@@ -48,7 +48,7 @@ namespace ProyectoWebBlog.Controllers
                 var isValidUser = ValidarUsuario(model);
                 if (isValidUser != null)
                 {
-                    FormsAuthentication.SetAuthCookie(model.Correo, false);
+                    FormsAuthentication.SetAuthCookie(model.Cedula, false);
                     return RedirectToAction("~/Home");
                 }
                 else
@@ -65,7 +65,7 @@ namespace ProyectoWebBlog.Controllers
 
         public UsuarioModel ValidarUsuario(LoginModel model)
         {
-            var usuario = AccesoUsuarios.ObtenerUsuario(model.Contrasena, model.Correo);
+            var usuario = AccesoUsuarios.ObtenerUsuario(model.Contrasena, model.Cedula);
             if (usuario == null)
             {
                 return null;

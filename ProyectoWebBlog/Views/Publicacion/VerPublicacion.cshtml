@@ -25,13 +25,13 @@
         string valorId = valorTitulo + "-";
         valorTitulo += "|" + ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss");
     }
-    <div class="card cards-publicacion">
+    <div class="card border-light mb-3 shadow p-3 mb-5 bg-white rounded cards-publicacion">
         <img class="card-img-top" src="@Url.Action("accederArchivo", "Publicacion", new { identificador = @ViewBag.publicacion.Titulo, fecha = @ViewBag.publicacion.Fecha })">
         <div class="card-body">
             <h8 class="card-title">@ViewBag.publicacion.Fecha</h8>
         </div>
         <div class="card-body">
-            <p class="card-text texto-publicacion">@ViewBag.publicacion.Texto</p>
+            <p class="card-text" style="text-align:justify">@ViewBag.publicacion.Texto</p>
         </div>
         <div class="card-footer">
             <div class="row">
@@ -41,11 +41,21 @@
 
                 </div>
                 <div class="col">
-                    <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@ViewBag.publicacion.Titulo&fecha=@ViewBag.publicacion.Fecha">Comentar</a>
-                    <a class="btn btn-secondary" style="float: right; margin-right: 10px;" href="~/Publicacion/VerPublicacion/?Titulo=@ViewBag.publicacion.Titulo&Fecha=@ViewBag.publicacion.Fecha&autor=@ViewBag.autor">Ver más</a>
+                    <a class="btn btn-secondary" style="float:right;" href="~/Comentario/AgregarComentario/?titulo=@ViewBag.publicacion.Titulo&fecha=@ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss")">Comentar</a>
                 </div>
 
+
             </div>
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="row justify-content-end">
+                    <div>
+                        <a class="btn btn-light" onclick="location.href='@Url.Action("EliminarPublicacion", "Publicacion", new { Titulo = @ViewBag.publicacion.Titulo, Fecha = @ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss") })'">Borrar publicación</a>
+                        <a class="btn btn-light" style="float:left;" onclick="location.href='@Url.Action("ObtenerListaComentarios", "Comentario", new { tituloPublicacion = @ViewBag.publicacion.Titulo, fechaPulicacion = @ViewBag.publicacion.Fecha.ToString("yyyyMMddHHmmss")})'">Administrar comentarios</a>
+                    </div>
+
+                </div>
+            }
 
 
         </div>

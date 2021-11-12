@@ -45,6 +45,7 @@ footer {
 .cards-publicaciones {
     margin: 0 auto 30px auto;
     width: 100%;
+    border-radius: 15px!important;
 }
 
 .cards-comentarios {
@@ -105,7 +106,8 @@ footer {
 
 .cards-publicacion {
     margin: 0 auto 30px auto;
-    width: 60%;
+    width: 70%;
+    border-radius: 15px !important;
 }
 
 .cards-publicacion .card-img-top{

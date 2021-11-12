@@ -1,0 +1,33 @@
+﻿
+@model List<ProyectoWebBlog.Models.ViewModels.ComentarioModel>
+@{
+    ViewBag.Title = "Administrar comentarios";
+}
+
+<div class="container justify-content-center" style="margin: 30px auto 40px auto">
+
+    <div class="row">
+        <h2 style="margin: 0 auto 40px auto">@ViewBag.Title</h2>
+        <div class="col-md-12">
+            <table class="table">
+                <tr>
+                    <th>Correo </th>
+                    <th>Texto </th>
+                    <th>Fecha publicación </th>
+                </tr>
+                @foreach (var elemento in Model)
+                {
+                    <tr>
+                        <td>@elemento.Correo</td>
+                        <td>@elemento.Texto</td>
+                        <td>@elemento.FechaHoraPublicado</td>
+                        <td>
+                            <a class="btn btn-danger" onclick="location.href='@Url.Action("EliminarComentario", "Comentario", new { correo = elemento.Correo, fecha = elemento.FechaHoraPublicado.ToString("yyyyMMddHHmmss") })'">Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+    </div>
+</div>

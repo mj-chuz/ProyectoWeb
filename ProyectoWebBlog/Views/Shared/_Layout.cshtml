@@ -26,10 +26,18 @@
                     @if (User.IsInRole("Admin") || User.IsInRole("Autor"))
                     {
 
-                        <li class="nav-item">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-logout">
-                                Logout
-                            </button>
+
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-fw fa-user"></i> @Html.Encode(User.Identity.Name)
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink2">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-logout">Cerrar sesión</a></li>
+                            </ul>
+
+
                         </li>
                     }
                     else

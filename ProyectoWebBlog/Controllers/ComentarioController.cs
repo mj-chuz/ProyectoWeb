@@ -8,6 +8,9 @@ using ProyectoWebBlog.Models.ViewModels;
 using System.IO;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Data.Entity;
+using System.Data.Entity.Core;
+using System.Data.Entity.Core.Objects;
 
 namespace ProyectoWebBlog.Controllers
 {
@@ -19,13 +22,13 @@ namespace ProyectoWebBlog.Controllers
         {
             AccesoAPublicacion = new PublicacionController();
         }
-        public ActionResult Index()
+        public ActionResult ObtenerListaComentarios(string tituloPublicacion, string fechaPulicacion)
         {
-
+            DateTime fechaParseada = DateTime.ParseExact(fechaPulicacion, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
             List<ComentarioModel> comentarios;
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
-                comentarios = (from comentario in baseDatos.Comentario
+                comentarios = (from comentario in baseDatos.Comentario.Where(x => x.tituloFK == tituloPublicacion && x.fechaFK == fechaParseada )
                                select new ComentarioModel
                                {
                                    Correo = comentario.correoPK,
@@ -99,7 +102,23 @@ namespace ProyectoWebBlog.Controllers
             }
             return Json(comentarios);
         }
-       
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult EliminarComentario(string correo, String fecha)
+        {
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+
+                DateTime fechaParseada = DateTime.ParseExact(fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+                baseDatos.Comentario.Remove(baseDatos.Comentario.Where(x => x.correoPK == correo && DbFunctions.TruncateTime(x.fechaPublicadoPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault());
+                baseDatos.SaveChanges();
+
+            }
+            return Redirect("~/Home");
+        }
+
     }
 
 

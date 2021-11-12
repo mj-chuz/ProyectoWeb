@@ -54,6 +54,18 @@ namespace ProyectoWebBlog.Controllers
             }
         }
 
+        public void DisminuirComentarios(string Titulo, DateTime Fecha)
+        {
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && x.fechaPK == Fecha).SingleOrDefault();
+                publicacionTabla.numeroComentarios -= 1;
+                baseDatos.Entry(publicacionTabla).State = System.Data.Entity.EntityState.Modified;
+                baseDatos.SaveChanges();
+
+            }
+        }
+
         public List<PublicacionModel> ObtenerPublicacionesSegunAutor(int id)
         {
             List<PublicacionModel> publicaciones;
@@ -104,6 +116,7 @@ namespace ProyectoWebBlog.Controllers
             ViewBag.CantidadTotalDePaginas = this.CantidadPaginas;
             ViewBag.Categoria = nombreCategoria;
             ViewBag.ListaUsuarios = AccesoAUsuarios.ObtenerNombreIdUsuarios();
+            ViewBag.ListaCategorias = AccesoCategorias.ObtenerNombreCategorias();
             return View(publicacion);
         }
 
@@ -120,6 +133,7 @@ namespace ProyectoWebBlog.Controllers
             ViewBag.nombreAutor = nombreCompleto;
             ViewBag.idAutor = id;
             ViewBag.ListaUsuarios = AccesoAUsuarios.ObtenerNombreIdUsuarios();
+            ViewBag.ListaCategorias = AccesoCategorias.ObtenerNombreCategorias();
             return View(publicacion);
         }
 
@@ -332,6 +346,23 @@ namespace ProyectoWebBlog.Controllers
             int indiceFinal = indiceInicio + 5;
             Tuple<int, int> indicesBusqueda = new Tuple<int, int>(indiceInicio, indiceFinal);
             return this.ObtenerPublicacionesPaginacion(indicesBusqueda, publicaciones);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult EliminarPublicacion(string Titulo, String Fecha)
+        {
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+
+                DateTime fechaParseada = DateTime.ParseExact(Fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault();
+                baseDatos.Publicacion.Attach(publicacionTabla);
+                baseDatos.Publicacion.Remove(publicacionTabla);
+                baseDatos.SaveChanges();
+
+            }
+            return Redirect("~/Home");
         }
 
     }

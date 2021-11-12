@@ -70,47 +70,74 @@ namespace ProyectoWebBlog.Controllers
         [HttpPost]
         public ActionResult CrearUsuario(UsuarioModel usuarioNuevo)
         {
-            Register RegistroUsuario = new Register(usuarioNuevo);
-            var creacionDeUsuario = RegistroUsuario.CreateUser_Click();
-            if ( creacionDeUsuario != null)
+            try
             {
-                ViewBag.CreacionDeUsuario = creacionDeUsuario;
-                try
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    using (WebBlogEntities baseDatos = new WebBlogEntities())
                     {
-                        using (WebBlogEntities baseDatos = new WebBlogEntities())
-                        {
-                            var usuario = new Usuario();
-                            usuario.nombre = usuarioNuevo.Nombre;
-                            usuario.correo = usuarioNuevo.Correo;
-                            usuario.idPK = usuarioNuevo.Id;
-                            usuario.primerApellido = usuarioNuevo.PrimerApellido;
-                            usuario.segundoApellido = usuarioNuevo.SegundoApellido;
-                            usuario.rol = usuarioNuevo.Rol;
-                            usuario.contrasena = usuarioNuevo.Contrasena;
-                            baseDatos.Usuario.Add(usuario);
-                            baseDatos.SaveChanges();
-                        }
-
-                        return View();
+                        var usuario = new Usuario();
+                        usuario.nombre = usuarioNuevo.Nombre;
+                        usuario.correo = usuarioNuevo.Correo;
+                        usuario.idPK = usuarioNuevo.Id;
+                        usuario.primerApellido = usuarioNuevo.PrimerApellido;
+                        usuario.segundoApellido = usuarioNuevo.SegundoApellido;
+                        usuario.rol = usuarioNuevo.Rol;
+                        usuario.contrasena = usuarioNuevo.Contrasena;
+                        baseDatos.Usuario.Add(usuario);
+                        baseDatos.SaveChanges();
                     }
-
-                    return View(usuarioNuevo);
-
+                    var creacionDeUsuario = RegistrarUsuario(usuarioNuevo);
+                    if (creacionDeUsuario != null)
+                    {
+                        ViewBag.CreacionDeUsuario = creacionDeUsuario;
+                    }
+                    return Redirect("~/Home");
                 }
-                catch (Exception excepcion)
-                {
-                    throw new Exception(excepcion.Message);
-                }
+                ViewBag.CreacionDeUsuario = "Algo salió mal y no se pudo crear el usuario :(";
+                return View(usuarioNuevo);
+
+            }
+            catch (Exception excepcion)
+            {
+                throw new Exception(excepcion.Message);
+            }
+            
+
+        }
+
+        public string RegistrarUsuario(UsuarioModel registroUsuario)
+        {
+
+            var usuarioFabrica = new UserStore<IdentityUser>();
+            var manejadorUsuario = new UserManager<IdentityUser>(usuarioFabrica);
+            var usuario = new IdentityUser() { UserName = registroUsuario.Id.ToString() };
+
+            IdentityResult result = manejadorUsuario.Create(usuario, registroUsuario.Contrasena);
+
+            if (result.Succeeded)
+            {
+                manejadorUsuario.AddToRole(usuario.Id, registroUsuario.Rol);
+                var manejadorAutenticacion = HttpContext.Request.GetOwinContext().Authentication;
+                var identidadUsuario = manejadorUsuario.CreateIdentity(usuario, DefaultAuthenticationTypes.ApplicationCookie);
+                manejadorAutenticacion.SignIn(new AuthenticationProperties() { }, identidadUsuario);
+                String resultado = "Usuario registrado con éxito";
+                return resultado;
             }
             else
             {
-                ViewBag.CreacionDeUsuario = "Algo salió mal y no se pudo crear el usuario :(";
-                return View(usuarioNuevo);
+                return null;
             }
-
         }
+
+        public bool CreateRole(string name)
+        {
+            var rolFabrica = new RoleStore<IdentityRole>();
+            var manejadorRol = new RoleManager<IdentityRole>(rolFabrica);
+            var resultado = manejadorRol.Create(new IdentityRole(name));
+            return resultado.Succeeded;
+        }
+
         [Authorize(Roles = "Admin")]
         public ActionResult EditarUsuario(int Id)
         {
@@ -166,10 +193,14 @@ namespace ProyectoWebBlog.Controllers
                         baseDatos.Entry(usuario).State = System.Data.Entity.EntityState.Modified;
                         baseDatos.SaveChanges();
                     }
-                    return Redirect("~/Usuario");
+                    return Redirect("~/Usuario/ObtenerListaUsuarios");
+                }
+                else
+                {
+                    ViewBag.MensajeError = "Algo salió mal, no se pudieron guardar las nuevas especificaciones :(";
+                    return View(usuarioNuevo);
                 }
 
-                return View(usuarioNuevo);
 
             }
             catch (Exception excepcion)
@@ -199,10 +230,25 @@ namespace ProyectoWebBlog.Controllers
         [HttpPost]
         public ActionResult Login(LoginModel usuario)
         {
-            Login manejadorSesiones = new Login();
-            bool resultadoLogin = manejadorSesiones.SignIn(usuario);
-            ViewBag.resultadoLogin = resultadoLogin;
-            return View();
+            var usuarioFabrica = new UserStore<IdentityUser>();
+            var manejadorUsuario = new UserManager<IdentityUser>(usuarioFabrica);
+            var user = manejadorUsuario.Find(usuario.Cedula, usuario.Contrasena);
+
+            if (user != null)
+            {
+                var manejadorAutenticacion = HttpContext.Request.GetOwinContext().Authentication;
+                var identidadUsuario = manejadorUsuario.CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie);
+
+                manejadorAutenticacion.SignIn(new AuthenticationProperties() { IsPersistent = false }, identidadUsuario);
+                ViewBag.resultadoLogin = true;
+                return Redirect("~/Home");
+            }
+            else
+            {
+                ViewBag.resultadoLogin = false;
+                return View();
+            }
+            
         }
 
         public void Logout()

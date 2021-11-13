@@ -323,7 +323,7 @@ namespace ProyectoWebBlog.Controllers
             PublicacionModel publicacion = new PublicacionModel();
             using (WebBlogEntities baseDatos = new WebBlogEntities())
             {
-                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(Fecha)).SingleOrDefault();
+                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(Fecha)).First();
                 bytes = publicacionTabla.imagenPublicacion;
                 contentType = publicacionTabla.tipoArchivo;
 
@@ -356,8 +356,7 @@ namespace ProyectoWebBlog.Controllers
             {
 
                 DateTime fechaParseada = DateTime.ParseExact(Fecha, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
-                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(fechaParseada)).SingleOrDefault();
-                baseDatos.Publicacion.Attach(publicacionTabla);
+                var publicacionTabla = baseDatos.Publicacion.Where(x => x.tituloPK == Titulo && DbFunctions.TruncateTime(x.fechaPK) == DbFunctions.TruncateTime(fechaParseada)).First();
                 baseDatos.Publicacion.Remove(publicacionTabla);
                 baseDatos.SaveChanges();
 

@@ -1,7 +1,8 @@
 ﻿
-@model List<ProyectoWebBlog.Models.ViewModels.ComentarioModel>
+
+@model List<ProyectoWebBlog.Models.ViewModels.CategoriaModel>
 @{
-    ViewBag.Title = "Administrar comentarios";
+    ViewBag.Title = "Administrar categorias";
 }
 
 <div class="container justify-content-center" style="margin: 30px auto 40px auto">
@@ -9,20 +10,18 @@
     <div class="row">
         <h2 style="margin: 0 auto 40px auto">@ViewBag.Title</h2>
         <div class="col-md">
-            <div class="container" style="overflow-x: scroll">
+            <div class="container">
                 <table class="table">
                     <tr>
-                        <th>Correo </th>
-                        <th>Texto </th>
-                        <th>Fecha publicación </th>
+                        <th>Nombre categoría </th>
                     </tr>
                     @foreach (var elemento in Model)
                     {
                         <tr>
-                            <td>@elemento.Correo</td>
-                            <td><p>@elemento.Texto</p></td>
-                            <td>@elemento.FechaHoraPublicado</td>
+                            <td>@elemento.Nombre</td>
+                            <td><a class="btn btn-danger" onclick="location.href='@Url.Action("EliminarCategoria", "Categoria", new { Id = elemento.Nombre })'">Eliminar</a></td>
                         </tr>
+                        
                     }
                 </table>
             </div>

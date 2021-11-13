@@ -131,16 +131,6 @@
                     </div>
 
                 }
-                <div class="justify-content-center paginacion-principal cards-publicaciones">
-                    <ul class="pagination pagination-sm paginacion">
-                        <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = ViewBag.PaginaActual - 1, nombreCategoria = ViewBag.Categoria })">Anterior</a></li>
-                        @for (int pagina = ViewBag.NumeroInicioPaginacion; pagina <= ViewBag.NumeroFinalPaginacion; pagina++)
-                        {
-                            <li class="page-item"><a class="page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = pagina, nombreCategoria = ViewBag.Categoria })">@pagina</a></li>
-                        }
-                        <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = ViewBag.PaginaActual + 1, nombreCategoria = ViewBag.Categoria })">Siguiente</a></li>
-                    </ul>
-                </div>
             }
             else
             {
@@ -148,6 +138,16 @@
                     <h7>No hay publicaciones que mostrar</h7>
                 </div>
             }
+            <div class="justify-content-center paginacion-principal cards-publicaciones">
+                <ul class="pagination pagination-sm paginacion">
+                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = ViewBag.PaginaActual - 1, nombreCategoria = ViewBag.Categoria })">Anterior</a></li>
+                    @for (int pagina = ViewBag.NumeroInicioPaginacion; pagina <= ViewBag.NumeroFinalPaginacion; pagina++)
+                    {
+                        <li class="page-item"><a class="page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = pagina, nombreCategoria = ViewBag.Categoria })">@pagina</a></li>
+                    }
+                    <li class="page-item"><a class="botones-paginacion page-link" href="@Url.Action("VerPublicacionesCategoria", "Publicacion", new { paginaMostrada = ViewBag.PaginaActual + 1, nombreCategoria = ViewBag.Categoria })">Siguiente</a></li>
+                </ul>
+            </div>
         </div>
     </div>
         

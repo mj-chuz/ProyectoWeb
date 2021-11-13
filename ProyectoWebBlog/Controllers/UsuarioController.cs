@@ -14,6 +14,15 @@ namespace ProyectoWebBlog.Controllers
 {
     public class UsuarioController : Controller
     {
+        Dictionary<string, string> RolesInfo;
+
+        public UsuarioController()
+        {
+            RolesInfo = new Dictionary<string, string>();
+            RolesInfo.Add("Admin", "8fa69e30-42c8-44d4-846f-e5e671e35137");
+            RolesInfo.Add("Autor", "79996259-0c66-4503-b9f7-898a2654f36f");
+        }
+
         public ActionResult ObtenerListaUsuarios()
         {
             List<UsuarioModel> usuario;
@@ -130,7 +139,7 @@ namespace ProyectoWebBlog.Controllers
             }
         }
 
-        public bool CreateRole(string name)
+        public bool CrearRol(string name)
         {
             var rolFabrica = new RoleStore<IdentityRole>();
             var manejadorRol = new RoleManager<IdentityRole>(rolFabrica);
@@ -150,6 +159,7 @@ namespace ProyectoWebBlog.Controllers
                 usuario.Nombre = usuarioTabla.nombre;
                 usuario.PrimerApellido = usuarioTabla.primerApellido;
                 usuario.SegundoApellido = usuarioTabla.segundoApellido;
+                usuario.Contrasena = usuarioTabla.contrasena;
                 usuario.Rol = usuarioTabla.rol;
 
             }
@@ -188,10 +198,12 @@ namespace ProyectoWebBlog.Controllers
                         usuario.idPK = usuarioNuevo.Id;
                         usuario.primerApellido = usuarioNuevo.PrimerApellido;
                         usuario.segundoApellido = usuarioNuevo.SegundoApellido;
+                        usuario.contrasena = usuarioNuevo.Contrasena;
                         usuario.rol = usuarioNuevo.Rol;
-
+                       
                         baseDatos.Entry(usuario).State = System.Data.Entity.EntityState.Modified;
                         baseDatos.SaveChanges();
+                        this.CambiarRol(usuarioNuevo,RolesInfo[usuarioNuevo.Rol]);
                     }
                     return Redirect("~/Usuario/ObtenerListaUsuarios");
                 }
@@ -256,6 +268,19 @@ namespace ProyectoWebBlog.Controllers
             var manejadorAutenticacion = HttpContext.Request.GetOwinContext().Authentication;
             manejadorAutenticacion.SignOut();
             Response.Redirect("~/Home");
+        }
+
+        public void CambiarRol(UsuarioModel usuarioModificado, String idRol)
+        {
+            var usuarioFabrica = new UserStore<IdentityUser>();
+            var manejadorUsuario = new UserManager<IdentityUser>(usuarioFabrica);
+            var rolFabrica = new RoleStore<IdentityRole>();
+            var manejadorRol = new RoleManager<IdentityRole>(rolFabrica);
+            var usuarioViejo = manejadorUsuario.FindByName(usuarioModificado.Id.ToString());
+            var rolViejo = manejadorRol.FindById(usuarioViejo.Roles.FirstOrDefault().RoleId);
+            var rolNuevo = manejadorRol.FindById(idRol);
+            manejadorUsuario.RemoveFromRole(usuarioViejo.Id, rolViejo.Name);
+            var usuario = manejadorUsuario.AddToRole(usuarioViejo.Id, rolNuevo.Name);
         }
 
     }

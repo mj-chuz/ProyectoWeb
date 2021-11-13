@@ -66,5 +66,37 @@ namespace ProyectoWebBlog.Controllers
             return nombreCategorias;
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult ObtenerListaCategorias()
+        {
+            List<CategoriaModel> categorias;
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+                categorias = (from categoria in baseDatos.Categoria
+                              select new CategoriaModel
+                              {
+                                  Nombre = categoria.nombrePK
+                              }).ToList();
+            }
+
+            return View(categorias);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult EliminarCategoria(string Id)
+        {
+            using (WebBlogEntities baseDatos = new WebBlogEntities())
+            {
+
+                var categoriaTabla = baseDatos.Categoria.Find(Id);
+                baseDatos.Categoria.Remove(categoriaTabla);
+                baseDatos.SaveChanges();
+
+            }
+            return Redirect("~/Categoria/ObtenerListaCategorias");
+        }
+
     }
+
 }

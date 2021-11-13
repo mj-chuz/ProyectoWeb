@@ -297,6 +297,7 @@
     <Content Include="Views\Usuario\Login.cshtml" />
     <Content Include="Views\Usuario\ObtenerListaUsuarios.cshtml" />
     <Content Include="Views\Comentario\ObtenerListaComentarios.cshtml" />
+    <Content Include="Views\Categoria\ObtenerListaCategorias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

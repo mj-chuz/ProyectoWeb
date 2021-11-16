@@ -4,7 +4,7 @@
     if ($(idBuscador).attr('value')) {
             $.ajax({
 
-                type: 'POST',
+                type: 'GET',
                 url: $("#comentarios-controller").data("request-url"),
                 dataType: 'json',
 

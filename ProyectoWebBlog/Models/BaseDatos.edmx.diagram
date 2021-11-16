@@ -4,11 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1164645bf2d04197ab1a2125d7e97535" Name="Diagram1" ZoomLevel="11">
-        <EntityTypeShape EntityType="WebBlogModel.Categoria" Width="1.5" PointX="0.75" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebBlogModel.Comentario" Width="1.5" PointX="5.25" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebBlogModel.Publicacion" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebBlogModel.Usuario" Width="1.5" PointX="0.75" PointY="5.25" IsExpanded="true" />
+      <Diagram DiagramId="1164645bf2d04197ab1a2125d7e97535" Name="Diagram1" ZoomLevel="140">
+        <EntityTypeShape EntityType="WebBlogModel.Categoria" Width="1.5" PointX="4.875" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebBlogModel.Comentario" Width="1.5" PointX="9" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebBlogModel.Publicacion" Width="1.5" PointX="6.875" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebBlogModel.Usuario" Width="1.5" PointX="4.875" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="WebBlogModel.FK_Categoria" ManuallyRouted="false" />
         <AssociationConnector Association="WebBlogModel.FK_Publicacion" ManuallyRouted="false" />
         <AssociationConnector Association="WebBlogModel.FK_Usuario" ManuallyRouted="false" />
